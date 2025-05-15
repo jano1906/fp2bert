@@ -57,7 +57,7 @@ def encode(input_file: str, output_file: str):
             batch = [Chem.MolFromSmiles(x) for x in batch]
             batch = [" ".join(mol2alt_sentence(x,1)) for x in batch]
             inputs = State.tokenizer(batch, return_tensors="pt", padding=True)
-            inputs = {k: v.to(State.device) for k, v in inputs.items()}
+            inputs = {k: v.to(State.device)[:, :256] for k, v in inputs.items()}
             outs = State.model(**inputs)
             out = outs[0]
             mask = inputs["attention_mask"]
